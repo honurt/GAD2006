@@ -1,0 +1,14 @@
+{
+	"version": 1,
+	"changelists": [
+		{
+			"guid": "00000000000000000000000000000000",
+			"description": "Default Uncontrolled Changelist",
+			"files": [
+				"C:/Users/Onur/Documents/Unreal Projects/LearningCPP/Content/Blueprints/BP_Avatar.uasset",
+				"C:/Users/Onur/Documents/Unreal Projects/LearningCPP/Content/Blueprints/BP_COAGameMode.uasset",
+				"C:/Users/Onur/Documents/Unreal Projects/LearningCPP/Content/ThirdPerson/Maps/ThirdPersonMap.umap"
+			]
+		}
+	]
+}
