@@ -86,9 +86,13 @@ void ACOAAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACOAAvatar::RunPressed()
 {
-	if (bStaminaDrained == false)
+	if(GetVelocity().Size() > 0)
 	{
-		UpdateMovementParams();
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Character is walking"));
+		if (bStaminaDrained == false)
+		{
+			UpdateMovementParams();
+		}
 	}
 }
 
