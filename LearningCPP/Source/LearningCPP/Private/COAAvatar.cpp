@@ -3,6 +3,7 @@
 
 #include "COAAvatar.h"
 
+#include "COABullet.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -17,7 +18,7 @@ ACOAAvatar::ACOAAvatar()
 	
 	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
-	SpringArm->TargetArmLength = 300.0f;
+	SpringArm->TargetArmLength = 300.f;
 	SpringArm->SetupAttachment(RootComponent);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
@@ -82,6 +83,31 @@ void ACOAAvatar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 	PlayerInputComponent->BindAction("Run",IE_Pressed,this,&ACOAAvatar::RunPressed);
 	PlayerInputComponent->BindAction("Run",IE_Released,this,&ACOAAvatar::RunReleased);
+
+	PlayerInputComponent->BindAction("Shoot",IE_Pressed,this,&ACOAAvatar::ShootPressed);
+}
+
+void ACOAAvatar::ShootPressed()
+{
+	if (BulletClass)
+	{
+		FActorSpawnParameters spawnParameters;
+		spawnParameters.Owner = this;
+		spawnParameters.Instigator = this;
+		spawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		spawnParameters.bNoFail = true;
+
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(GetActorForwardVector() * 100.f + GetActorLocation());
+		SpawnTransform.SetRotation(GetViewRotation().Quaternion());
+		SpawnTransform.SetScale3D(FVector(1, 1, 1));
+
+		GetWorld()->SpawnActor<ACOABullet>(BulletClass, SpawnTransform, spawnParameters);
+	}
+	
+	
+	
+
 }
 
 void ACOAAvatar::RunPressed()

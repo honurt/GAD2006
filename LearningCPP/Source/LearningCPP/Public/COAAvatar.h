@@ -53,6 +53,8 @@ public:
 	
 	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	void ShootPressed();
+
 
 private:
 	void RunPressed();
@@ -60,4 +62,9 @@ private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 	void UpdateMovementParams();
+
+protected:
+	
+	UPROPERTY(EditAnywhere, Category = "ShootingLogic")
+	TSubclassOf<class ACOABullet> BulletClass;
 };
