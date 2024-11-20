@@ -94,7 +94,7 @@ void ACOAAvatar::Tick(float DeltaTime)
 		
 		
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("Stamina: %.f"), Stamina));
+	GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("Stamina: %.f"), Stamina));
 	
 }
 
@@ -238,9 +238,8 @@ void ACOAAvatar::InitVaultCheck(bool& VaultFound)
 	
 	if(Hit.bBlockingHit)
 	{
-		SettingLoc = Hit.Location;
 		
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("HIT"));
+		SettingLoc = Hit.Location;
 		VaultFound = true;
 		
 	}
@@ -274,7 +273,7 @@ void ACOAAvatar::InitVaultCheck(bool& VaultFound)
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Vertical trace failed."));
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Cant climb there!"));
 		}
 	}
 

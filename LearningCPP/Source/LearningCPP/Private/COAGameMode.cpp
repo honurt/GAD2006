@@ -19,12 +19,13 @@ void ACOAGameMode::OnTargetHit()
 
 	 	if(GS->Points >= PointsToWin)
 	 	{
-	 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You Won!"));
+	 		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, *FString::Printf(TEXT("Score: %d"), GS->Points));
+	 		GEngine->AddOnScreenDebugMessage(-1, 12.0f, FColor::Yellow, TEXT("You Won!"));
 
 	 	}
 	    else
 	    {
-	    	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, *FString::Printf(TEXT("Score: %d"), GS->Points));
+	    	GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Red, *FString::Printf(TEXT("Score: %d"), GS->Points));
 	    }
 	 }
 }
