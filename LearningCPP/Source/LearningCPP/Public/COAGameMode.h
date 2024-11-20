@@ -14,4 +14,11 @@ class LEARNINGCPP_API ACOAGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+	public:
+	ACOAGameMode();
+
+	void OnTargetHit();
+
+	UPROPERTY(EditAnywhere, Category="Rules")
+	int32 PointsToWin;
 };
