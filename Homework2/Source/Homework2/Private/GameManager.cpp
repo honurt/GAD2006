@@ -40,20 +40,54 @@ void AGameManager::OnActorClicked(AActor* Actor, FKey Button)
 		return;
 	}
 
-	if (Slot->Unit == nullptr)
+	if(CommandPool.IsEmpty())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is null, proceeding to execute MoveCommand."));
-		TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
+		if (Slot->Unit == nullptr)
+		{
 		
-		CommandPool.Add(Cmd);
-		Cmd->Execute();
-		CurrentCommand = Cmd;
-		UE_LOG(LogTemp, Warning, TEXT("MoveCommand executed and set as CurrentCommand."));
+			UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is null, proceeding to execute MoveCommand."));
+			TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
+		
+			CommandPool.Add(Cmd);
+			Cmd->Execute();
+			CurrentCommand = Cmd;
+			UE_LOG(LogTemp, Warning, TEXT("MoveCommand executed and set as CurrentCommand."));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is occupied."));
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is occupied."));
+		for (TSharedPtr<Command> Command : CommandPool)
+		{
+		
+			TSharedPtr<MoveCommand> MoveCmd = StaticCastSharedPtr<MoveCommand>(Command);
+			if (MoveCmd.IsValid())
+			{
+			
+				if(MoveCmd->Destination.Col == Slot->GridPosition.Col && MoveCmd->Destination.Row == Slot->GridPosition.Row)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("You previously moved here!"));
+					return;
+				}					
+			}
+			
+		
+		}
+		if (Slot->Unit == nullptr)
+		{
+		
+			TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
+		
+			CommandPool.Add(Cmd);
+			Cmd->Execute();
+			CurrentCommand = Cmd;						
+		}
 	}
+	
+	
 }
 
 
@@ -82,6 +116,7 @@ void AGameManager::CreateLevelActors(FSLevelInfo& LevelInfo)
 				if (Slot->Unit->IsControlledByThePlayer())
 				{
 					PlayerUnit = Slot->Unit;
+					Slot->SetState(Highlighted);
 					UE_LOG(LogTemp, Warning, TEXT("Player-controlled unit assigned."));
 				}
 			}
@@ -153,6 +188,11 @@ bool AGameManager::UndoLastMove()
 
 	UE_LOG(LogTemp, Warning, TEXT("Move undone successfully."));
 	return true;
+}
+
+void AGameManager::ExecuteCommand()
+{
+	
 }
 
 

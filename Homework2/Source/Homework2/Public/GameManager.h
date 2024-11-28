@@ -68,6 +68,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool UndoLastMove();
 
+	void ExecuteCommand();
+
 	private:
 	AUnitBase* PlayerUnit;
 
