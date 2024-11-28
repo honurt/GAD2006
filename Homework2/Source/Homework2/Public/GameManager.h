@@ -71,6 +71,8 @@ public:
 	void ExecuteCommand();
 
 	private:
+
+	
 	AUnitBase* PlayerUnit;
 
 	TArray<TSharedRef<Command>> CommandPool;

@@ -22,11 +22,14 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintPure)
 	bool IsControlledByThePlayer();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	FVector StartOffset;
 
 	UPROPERTY(VisibleAnywhere)
 	AGameSlot* Slot;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	uint8 MovementPoints;
 	
 
 protected:

@@ -44,14 +44,22 @@ void AGameManager::OnActorClicked(AActor* Actor, FKey Button)
 	{
 		if (Slot->Unit == nullptr)
 		{
+			if(PlayerUnit->MovementPoints > 0)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is null, proceeding to execute MoveCommand."));
+				TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
 		
-			UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is null, proceeding to execute MoveCommand."));
-			TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
-		
-			CommandPool.Add(Cmd);
-			Cmd->Execute();
-			CurrentCommand = Cmd;
-			UE_LOG(LogTemp, Warning, TEXT("MoveCommand executed and set as CurrentCommand."));
+				CommandPool.Add(Cmd);
+				Cmd->Execute();
+				CurrentCommand = Cmd;
+				UE_LOG(LogTemp, Warning, TEXT("MoveCommand executed and set as CurrentCommand."));
+				
+				PlayerUnit->MovementPoints -= 1;
+				
+				UE_LOG(LogTemp, Warning, TEXT("MovementPoints: %d."), PlayerUnit->MovementPoints);
+				
+			}
+			
 		}
 		else
 		{
@@ -79,11 +87,21 @@ void AGameManager::OnActorClicked(AActor* Actor, FKey Button)
 		if (Slot->Unit == nullptr)
 		{
 		
-			TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
+			if(PlayerUnit->MovementPoints > 0)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Slot's Unit is null, proceeding to execute MoveCommand."));
+				TSharedRef<MoveCommand> Cmd = MakeShared<MoveCommand>(PlayerUnit->Slot->GridPosition, Slot->GridPosition);
 		
-			CommandPool.Add(Cmd);
-			Cmd->Execute();
-			CurrentCommand = Cmd;						
+				CommandPool.Add(Cmd);
+				Cmd->Execute();
+				CurrentCommand = Cmd;
+				UE_LOG(LogTemp, Warning, TEXT("MoveCommand executed and set as CurrentCommand."));
+				
+				PlayerUnit->MovementPoints -= 1;
+				
+				UE_LOG(LogTemp, Warning, TEXT("MovementPoints: %d."), PlayerUnit->MovementPoints);
+				
+			}					
 		}
 	}
 	
@@ -174,17 +192,17 @@ bool AGameManager::UndoLastMove()
 	if (CommandPool.Num() == 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No previous move to undo."));
-		return false;  // No move to undo
+		return false;  
 	}
 
 	// Get the last command from the pool
 	TSharedRef<MoveCommand> LastMoveCommand = StaticCastSharedRef<MoveCommand>(CommandPool.Last());
+	
+	LastMoveCommand->Undo(); 
+	CommandPool.Pop();
 
-	// Perform the undo on the last command
-	LastMoveCommand->Undo(); // This will move the unit back to its previous position
-
-	// Remove the last command from the pool
-	CommandPool.RemoveAt(CommandPool.Num() - 1);
+	PlayerUnit->MovementPoints += 1;
+	UE_LOG(LogTemp, Warning, TEXT("MovementPoints: %d."), PlayerUnit->MovementPoints);
 
 	UE_LOG(LogTemp, Warning, TEXT("Move undone successfully."));
 	return true;
